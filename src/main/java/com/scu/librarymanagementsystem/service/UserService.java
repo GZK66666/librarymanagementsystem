@@ -13,10 +13,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
-
     public Long addUser(String userName, String passWord, UserType userType) {
         try {
             User user = new User();
@@ -31,5 +27,8 @@ public class UserService {
         } catch (Exception e) {
             return (long) -1;
         }
+    }
+    public User findUserByUserName(String userName) {
+        return userRepository.findByUsername(userName);
     }
 }
