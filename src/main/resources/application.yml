@@ -1,0 +1,14 @@
+spring:
+  # H2数据库基本配置
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: admin
+    password: 123456
+  # 启用H2控制台
+  h2:
+    console:
+      enabled: true
+      path: /h2
+
+
