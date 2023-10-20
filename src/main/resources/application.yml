@@ -11,4 +11,8 @@ spring:
       enabled: true
       path: /h2
 
-
+logging:
+  level:
+    root: INFO # 根日志级别，可以设置为 INFO、DEBUG、ERROR 等
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
