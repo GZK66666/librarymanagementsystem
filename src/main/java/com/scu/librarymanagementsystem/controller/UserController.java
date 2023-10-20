@@ -47,6 +47,25 @@ public class UserController {
         return new ResponseEntity<>("add user failed", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @GetMapping("/delete")
+    public void deleteUser(@RequestParam String userName) {
+        userService.deleteUser(userName);
+    }
+
+    @GetMapping("/updateUserName")
+    public int updateUserName(@RequestParam String oldUserName, @RequestParam String newUserName) {
+        return userService.updateUserName(oldUserName, newUserName);
+    }
+
+    @GetMapping("/updatePassWord")
+    public int updatePassWord(@RequestParam String userName, @RequestParam String newPassword) {
+        return userService.updatePassword(userName, newPassword);
+    }
+
+    @GetMapping("/updateUserType")
+    public int updateUserType(@RequestParam String userName, @RequestParam String userType) {
+        return userService.updateUserType(userName, userType.equals("admin")?UserType.ADMIN:UserType.USER);
+    }
 
     @GetMapping("/findUsersByUsernameAndUserType")
     @CrossOrigin // todo: remove when dev
