@@ -2,6 +2,7 @@ package com.scu.librarymanagementsystem.service;
 
 import com.scu.librarymanagementsystem.model.Book;
 import com.scu.librarymanagementsystem.repository.BookRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,11 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class BookService {
     @Autowired
     private BookRepository bookRepository;
-
-    private static Logger logger = LoggerFactory.getLogger(BookService.class);
 
     @Transactional
     public int addBook(Long isbn, String bookName, String author) {
@@ -30,7 +30,7 @@ public class BookService {
 
             return 1;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return 0;
         }
     }
@@ -42,7 +42,7 @@ public class BookService {
 
             return 1;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return 0;
         }
     }
@@ -52,7 +52,7 @@ public class BookService {
         try {
             return bookRepository.updateBook(isbn, newBookName, newAuthor);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return 0;
         }
     }
@@ -89,7 +89,7 @@ public class BookService {
 
             return bookRepository.findAll();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }

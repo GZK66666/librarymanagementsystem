@@ -3,6 +3,7 @@ package com.scu.librarymanagementsystem.service;
 import com.scu.librarymanagementsystem.common.enums.UserType;
 import com.scu.librarymanagementsystem.model.User;
 import com.scu.librarymanagementsystem.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-
-    private static Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Transactional
     public int addUser(String userName, String passWord, UserType userType) {
@@ -31,7 +31,7 @@ public class UserService {
 
             return 1;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return 0;
         }
     }
@@ -43,7 +43,7 @@ public class UserService {
 
             return 1;
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return 0;
         }
     }
@@ -54,7 +54,7 @@ public class UserService {
         try {
             return userRepository.updateUser(id, newUsername, newPassword, newUserType);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return 0;
         }
     }
@@ -75,7 +75,7 @@ public class UserService {
 
             return userRepository.findAll();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }
