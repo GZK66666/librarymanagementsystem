@@ -1,4 +1,4 @@
-package com.scu.librarymanagementsystem.config;
+package com.scu.librarymanagementsystem.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
