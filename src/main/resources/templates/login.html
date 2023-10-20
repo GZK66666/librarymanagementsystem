@@ -79,17 +79,29 @@
         // 进行登录操作
         form.on('submit(login)', function (data) {
             data = data.field;
-            if (data.username == '') {
-                layer.msg('用户名不能为空');
-                return false;
-            }
-            if (data.password == '') {
-                layer.msg('密码不能为空');
-                return false;
-            }
-            layer.msg('登录成功', function () {
-                window.location = '../static/index.html';
+            // 校验用户名和密码
+            $.ajax({
+                url: 'http://localhost:8080/api/Users/login', // todo: replace by relative path
+                method: 'GET',
+                data: {
+                    userName: data.username,
+                    passWord: data.password
+                },
+                success: function (res) {
+                    if (res == 'username error!') {
+                        layer.msg('用户名不存在！');
+                        return false
+                    }
+
+                    if (res == 'password error!') {
+                        layer.msg('密码错误！');
+                        return false
+                    }
+
+                    window.location = 'main.html';
+                }
             });
+
             return false;
         });
     });

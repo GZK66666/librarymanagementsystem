@@ -28,7 +28,15 @@ public class UserService {
             return (long) -1;
         }
     }
-    public User findUserByUserName(String userName) {
-        return userRepository.findByUsername(userName);
+    public List<User> findUsersByUserName(String userName) {
+        return userRepository.findUsersByUsername(userName);
+    }
+
+    public List<User> findUsersByUserType(UserType userType) {
+        return userRepository.findUsersByUserType(userType);
+    }
+
+    public List<User> findUsersByUserNameAndUserType(String username, UserType userType) {
+        return userRepository.findUsersByUserNameAndUserType(username, userType);
     }
 }
