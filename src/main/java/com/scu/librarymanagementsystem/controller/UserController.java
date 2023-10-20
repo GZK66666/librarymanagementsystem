@@ -24,7 +24,7 @@ public class UserController {
     @ApiOperation("登陆")
     @CrossOrigin // todo: remove when dev
     public String login(@RequestParam String userName, @RequestParam String passWord) {
-        List<User> foundUsers = userService.findUsersByUserName(userName);
+        List<User> foundUsers = userService.findUsersByMultiConditions(userName, null);
 
         if (foundUsers == null || foundUsers.isEmpty()) {
             return "username error!";
@@ -39,59 +39,28 @@ public class UserController {
         return "password error!";
     }
 
-    //    curl -X POST -H "Content-Type: application/x-www-form-urlencoded" -d "userName=jbl&passWord=123456" http://localhost:8080/api/Users/add
     @PostMapping("/add")
     @ApiOperation("新增用户")
-    public ResponseEntity<String> addUser(@RequestParam String userName, @RequestParam String passWord) {
-        Long id = userService.addUser(userName, passWord, UserType.USER); // todo: hardcode user type
-
-        if (id > 0) {
-            return new ResponseEntity<>("User with ID " + id + " created.", HttpStatus.CREATED);
-        }
-
-        return new ResponseEntity<>("add user failed", HttpStatus.INTERNAL_SERVER_ERROR);
+    public int addUser(@RequestParam String userName, @RequestParam String passWord) {
+        return userService.addUser(userName, passWord, UserType.USER); // todo: remove hardcode
     }
 
     @GetMapping("/delete")
     @ApiOperation("删除用户")
-    public void deleteUser(@RequestParam String userName) {
-        userService.deleteUser(userName);
+    public int deleteUser(@RequestParam Long id) {
+        return userService.deleteUserById(id);
     }
 
-    @GetMapping("/updateUserName")
-    @ApiOperation("更新用户名")
-    public int updateUserName(@RequestParam String oldUserName, @RequestParam String newUserName) {
-        return userService.updateUserName(oldUserName, newUserName);
+    @GetMapping("/updateUser")
+    @ApiOperation("更新用户")
+    public int updateUser(@RequestParam Long id, @RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newUserType) {
+        return userService.updateUser(id, newUsername, newPassword, newUserType.equals("admin")?UserType.ADMIN:UserType.USER);
     }
 
-    @GetMapping("/updatePassWord")
-    @ApiOperation("更新密码")
-    public int updatePassWord(@RequestParam String userName, @RequestParam String newPassword) {
-        return userService.updatePassword(userName, newPassword);
-    }
-
-    @GetMapping("/updateUserType")
-    @ApiOperation("更新用户类型")
-    public int updateUserType(@RequestParam String userName, @RequestParam String userType) {
-        return userService.updateUserType(userName, userType.equals("admin")?UserType.ADMIN:UserType.USER);
-    }
-
-    @GetMapping("/findUsersByUsernameAndUserType")
+    @GetMapping("/findUsers")
     @ApiOperation("搜索用户")
     @CrossOrigin // todo: remove when dev
-    public List<User> findUsersByUserNameAndUserType(@RequestParam String userName, @RequestParam String userType) {
-        if (userName.isEmpty() && userType.isEmpty()) {
-            return new ArrayList<>();
-        }
-
-        if (userName.isEmpty()) {
-            return userService.findUsersByUserType(userType.equals("admin")? UserType.ADMIN: UserType.USER);
-        }
-
-        if (userType.isEmpty()) {
-            return userService.findUsersByUserName(userName);
-        }
-
-        return userService.findUsersByUserNameAndUserType(userName, userType.equals("admin")? UserType.ADMIN: UserType.USER);
+    public List<User> findUsersByUserNameAndUserType(@RequestParam(required = false) String userName, @RequestParam(required = false) String userType) {
+        return userService.findUsersByMultiConditions(userName, userType);
     }
 }
