@@ -5,9 +5,11 @@ import com.scu.librarymanagementsystem.model.User;
 import com.scu.librarymanagementsystem.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,19 +61,19 @@ public class UserService {
 
     public List<User> findUsersByMultiConditions(String username, String userType) {
         try {
-            if (username != null && userType != null) {
-                return userRepository.findByUsernameAndUserType(username, userType.equals("admin")?UserType.ADMIN:UserType.USER);
-            }
+            Specification<User> spec = (root, query, criteriaBuilder) -> {
+                List<Predicate> predicates = new ArrayList<>();
+                if (username != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("username"), username));
+                }
+                if (userType != null) {
+                    predicates.add(criteriaBuilder.equal(root.get("userType"), userType));
+                }
 
-            if (username != null && userType == null) {
-                return userRepository.findByUsername(username);
-            }
+                return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            };
 
-            if (username == null && userType != null) {
-                return userRepository.findByUserType(userType.equals("admin")?UserType.ADMIN:UserType.USER);
-            }
-
-            return userRepository.findAll();
+            return userRepository.findAll(spec);
         } catch (Exception e) {
             log.error(e.getMessage());
             return new ArrayList<>();

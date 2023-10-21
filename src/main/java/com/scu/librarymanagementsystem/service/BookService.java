@@ -6,9 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,35 +61,22 @@ public class BookService {
 
     public List<Book> findBooksByMultiConditions(Long isbn, String bookName, String author) { // todo: 多条件模糊查询需要重构一下，太冗余了
         try {
-            if (isbn != null && bookName != null && author != null) {
-                return bookRepository.findByIsbnAndBookNameAndAuthor(isbn, bookName, author);
-            }
+            Specification<Book> spec = ((root, criteriaQuery, criteriaBuilder) -> {
+               List<Predicate> predicates = new ArrayList<>();
+               if (isbn != null) {
+                   predicates.add(criteriaBuilder.equal(root.get("isbn"), isbn));
+               }
+               if (bookName != null) {
+                   predicates.add(criteriaBuilder.equal(root.get("bookName"), bookName));
+               }
+               if (author != null) {
+                   predicates.add(criteriaBuilder.equal(root.get("author"), author));
+               }
 
-            if (isbn == null && bookName != null && author != null) {
-                return bookRepository.findByBookNameAndAuthor(bookName, author);
-            }
+               return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+            });
 
-            if (isbn != null && bookName != null && author == null) {
-                return bookRepository.findByIsbnAndBookName(isbn, bookName);
-            }
-
-            if (isbn != null && bookName == null && author != null) {
-                return bookRepository.findByIsbnAndAuthor(isbn, author);
-            }
-
-            if (isbn != null && bookName == null && author == null) {
-                return bookRepository.findByIsbn(isbn);
-            }
-
-            if (isbn == null && bookName != null && author == null) {
-                return bookRepository.findByBookName(bookName);
-            }
-
-            if (isbn == null && bookName == null && author != null) {
-                return bookRepository.findByAuthor(author);
-            }
-
-            return bookRepository.findAll();
+            return bookRepository.findAll(spec);
         } catch (Exception e) {
             log.error(e.getMessage());
             return new ArrayList<>();
