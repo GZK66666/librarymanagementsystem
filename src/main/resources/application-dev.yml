@@ -1,0 +1,28 @@
+spring:
+  # H2数据库基本配置
+  datasource:
+    url: jdbc:h2:mem:devdb
+    driverClassName: org.h2.Driver
+    username: admin
+    password: 123456
+  # 启用H2控制台
+  h2:
+    console:
+      enabled: true
+      path: /h2
+  # redis配置
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    lettuce:
+      pool:
+        max-idle: 16
+        max-active: 32
+        min-idle: 8
+
+logging:
+  level:
+    root: INFO # 根日志级别，可以设置为 INFO、DEBUG、ERROR 等
+  pattern:
+    console: "dev: %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
