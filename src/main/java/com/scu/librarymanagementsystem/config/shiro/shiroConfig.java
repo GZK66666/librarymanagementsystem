@@ -22,11 +22,11 @@ public class shiroConfig {
 //        filterChainDefinitionMap.put("/api/Users/add", "authc");
         filterChainDefinitionMap.put("/api/Users/delete", "roles[admin]");
         filterChainDefinitionMap.put("/api/Users/updateUser", "roles[admin]");
-        filterChainDefinitionMap.put("/api/Users/findUsers", "roles[user]");
+        filterChainDefinitionMap.put("/api/Users/findUsers", "roles[admin]");
         filterChainDefinitionMap.put("/api/Books/add", "roles[admin]");
         filterChainDefinitionMap.put("/api/Books/delete", "roles[admin]");
         filterChainDefinitionMap.put("/api/Books/updateBook", "roles[admin]");
-        filterChainDefinitionMap.put("/api/Books/findBooks", "roles[user]");
+        filterChainDefinitionMap.put("/api/Books/findBooks", "authc");
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
