@@ -1,7 +1,6 @@
 package com.scu.librarymanagementsystem.service;
 
-import com.scu.librarymanagementsystem.common.enums.UserType;
-import com.scu.librarymanagementsystem.common.utils.RedisUtil;
+import com.scu.librarymanagementsystem.utils.RedisUtil;
 import com.scu.librarymanagementsystem.model.User;
 import com.scu.librarymanagementsystem.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,7 @@ public class UserService {
 
     private final TimeUnit USER_REDIS_TIMEOUT_UNIT = TimeUnit.MINUTES;
 
-    public int addUser(String userName, String passWord, UserType userType) {
+    public int addUser(String userName, String passWord, String userType) {
         try {
             User user = new User();
             user.setUsername(userName);
@@ -50,7 +49,7 @@ public class UserService {
             User oldUser = userRepository.findById(id).get();
             if (oldUser != null) {
                 userRepository.deleteById(id);
-                redisUtil.del(generateAllCacheKeys(oldUser.getUsername(), oldUser.getUserType().equals(UserType.ADMIN)?"admin":"user").toArray(new String[0]));
+                redisUtil.del(generateAllCacheKeys(oldUser.getUsername(), oldUser.getUserType()).toArray(new String[0]));
             }
 
             return 1;
@@ -62,7 +61,7 @@ public class UserService {
 
 
     @Transactional
-    public int updateUser(Long id, String newUsername, String newPassword, UserType newUserType) {
+    public int updateUser(Long id, String newUsername, String newPassword, String newUserType) {
         try {
             /**
              *先更新数据库，再删缓存，保证数据一致性（极少极少的情况下可能会出现不一致，可以通过超时时间兜底）
@@ -72,7 +71,7 @@ public class UserService {
             User oldUser = userRepository.findById(id).get();
             if (oldUser != null) {
                 userRepository.updateUser(id, newUsername, newPassword, newUserType);
-                redisUtil.del(generateAllCacheKeys(oldUser.getUsername(), oldUser.getUserType().equals(UserType.ADMIN)?"admin":"user").toArray(new String[0]));
+                redisUtil.del(generateAllCacheKeys(oldUser.getUsername(), oldUser.getUserType()).toArray(new String[0]));
             }
 
             return 1;

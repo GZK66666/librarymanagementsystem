@@ -1,6 +1,5 @@
 package com.scu.librarymanagementsystem.config.shiro;
 
-import com.scu.librarymanagementsystem.common.enums.UserType;
 import com.scu.librarymanagementsystem.model.User;
 import com.scu.librarymanagementsystem.service.UserService;
 import org.apache.shiro.SecurityUtils;
@@ -31,7 +30,7 @@ public class CustomRealm extends AuthorizingRealm {
 
         //设置角色
         Set<String> roles = new HashSet<>();
-        roles.add(user.getUserType().equals(UserType.ADMIN)?"admin":"user");
+        roles.add(user.getUserType().toLowerCase());
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo(roles);
 
         return info;

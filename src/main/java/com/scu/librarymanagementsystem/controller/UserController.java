@@ -1,8 +1,8 @@
 package com.scu.librarymanagementsystem.controller;
 
-import com.scu.librarymanagementsystem.common.enums.UserType;
 import com.scu.librarymanagementsystem.model.User;
 import com.scu.librarymanagementsystem.service.UserService;
+import com.scu.librarymanagementsystem.utils.UserType;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.SecurityUtils;
@@ -11,11 +11,8 @@ import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -45,7 +42,7 @@ public class UserController {
     @PostMapping("/add")
     @ApiOperation("新增用户")
     public int addUser(@RequestParam String userName, @RequestParam String passWord, @RequestParam String userType) {
-        return userService.addUser(userName, passWord, userType.equals("admin")?UserType.ADMIN:UserType.USER);
+        return userService.addUser(userName, passWord, userType.equalsIgnoreCase("admin")? UserType.ADMIN :UserType.USER);
     }
 
     @GetMapping("/delete")
@@ -57,7 +54,7 @@ public class UserController {
     @GetMapping("/updateUser")
     @ApiOperation("更新用户")
     public int updateUser(@RequestParam Long id, @RequestParam String newUsername, @RequestParam String newPassword, @RequestParam String newUserType) {
-        return userService.updateUser(id, newUsername, newPassword, newUserType.equals("admin")?UserType.ADMIN:UserType.USER);
+        return userService.updateUser(id, newUsername, newPassword, newUserType.equalsIgnoreCase("admin")?UserType.ADMIN:UserType.USER);
     }
 
     @GetMapping("/findUsers")

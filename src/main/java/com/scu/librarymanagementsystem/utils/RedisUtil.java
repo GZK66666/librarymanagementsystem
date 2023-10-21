@@ -1,4 +1,4 @@
-package com.scu.librarymanagementsystem.common.utils;
+package com.scu.librarymanagementsystem.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,7 +26,6 @@ public class RedisUtil {
     }
 
     public Object get(String key) {
-        System.out.println(redisTemplate.opsForValue().get(key));
         return redisTemplate.opsForValue().get(key);
     }
 

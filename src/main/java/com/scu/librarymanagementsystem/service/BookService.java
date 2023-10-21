@@ -1,6 +1,6 @@
 package com.scu.librarymanagementsystem.service;
 
-import com.scu.librarymanagementsystem.common.utils.RedisUtil;
+import com.scu.librarymanagementsystem.utils.RedisUtil;
 import com.scu.librarymanagementsystem.model.Book;
 import com.scu.librarymanagementsystem.repository.BookRepository;
 import lombok.extern.slf4j.Slf4j;

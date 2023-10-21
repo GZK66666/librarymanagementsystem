@@ -15,16 +15,4 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
     int updateBook(Long isbn, String newBookName, String newAuthor);
 
     List<Book> findByIsbn(Long isbn);
-
-    List<Book> findByBookName(String bookName);
-
-    List<Book> findByAuthor(String author);
-
-    List<Book> findByIsbnAndBookName(Long isbn, String bookName);
-
-    List<Book> findByIsbnAndAuthor(Long isbn, String author);
-
-    List<Book> findByBookNameAndAuthor(String bookName, String author);
-
-    List<Book> findByIsbnAndBookNameAndAuthor(Long isbn, String bookName, String author);
 }

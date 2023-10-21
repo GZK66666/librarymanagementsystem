@@ -1,9 +1,7 @@
 package com.scu.librarymanagementsystem.model;
 
-import com.scu.librarymanagementsystem.common.enums.UserType;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import io.swagger.annotations.ApiParam;
 
 import javax.persistence.*;
 
@@ -22,7 +20,7 @@ public class User {
     private String password;
 
     @ApiModelProperty("用户类型")
-    private UserType userType;
+    private String userType;
 
     public Long getId() {
         return id;
@@ -36,7 +34,7 @@ public class User {
         return password;
     }
 
-    public UserType getUserType() {
+    public String getUserType() {
         return userType;
     }
 
@@ -52,7 +50,7 @@ public class User {
         this.password = password;
     }
 
-    public void setUserType(UserType userType) {
+    public void setUserType(String userType) {
         this.userType = userType;
     }
 }
