@@ -3,7 +3,9 @@ package com.scu.librarymanagementsystem.common.utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 @Component
@@ -24,6 +26,17 @@ public class RedisUtil {
     }
 
     public Object get(String key) {
+        System.out.println(redisTemplate.opsForValue().get(key));
         return redisTemplate.opsForValue().get(key);
+    }
+
+    public void del(String... key) {
+        if (key != null && key.length > 0) {
+            if (key.length == 1) {
+                redisTemplate.delete(key[0]);
+            } else {
+                redisTemplate.delete(CollectionUtils.arrayToList(key));
+            }
+        }
     }
 }
