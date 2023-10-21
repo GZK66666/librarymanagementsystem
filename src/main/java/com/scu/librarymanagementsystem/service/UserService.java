@@ -19,7 +19,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Transactional
     public int addUser(String userName, String passWord, UserType userType) {
         try {
             User user = new User();

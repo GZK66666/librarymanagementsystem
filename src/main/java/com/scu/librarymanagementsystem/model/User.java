@@ -5,10 +5,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiParam;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @ApiModel("用户信息")
@@ -17,6 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 主键使用自增
     private Long id;
 
+    @Column(unique = true)
     @ApiModelProperty("用户名")
     private String username;
 

@@ -20,7 +20,6 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    @Transactional
     public int addBook(Long isbn, String bookName, String author) {
         try {
             Book book = new Book();

@@ -44,8 +44,8 @@ public class UserController {
 
     @PostMapping("/add")
     @ApiOperation("新增用户")
-    public int addUser(@RequestParam String userName, @RequestParam String passWord) {
-        return userService.addUser(userName, passWord, UserType.USER); // todo: remove hardcode
+    public int addUser(@RequestParam String userName, @RequestParam String passWord, @RequestParam String userType) {
+        return userService.addUser(userName, passWord, userType.equals("admin")?UserType.ADMIN:UserType.USER);
     }
 
     @GetMapping("/delete")

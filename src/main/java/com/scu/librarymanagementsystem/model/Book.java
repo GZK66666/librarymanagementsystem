@@ -3,6 +3,7 @@ package com.scu.librarymanagementsystem.model;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -13,6 +14,7 @@ public class Book {
     @ApiModelProperty("图书编号")
     private Long isbn;
 
+    @Column(unique = true)
     @ApiModelProperty("书名")
     private String bookName;
 
