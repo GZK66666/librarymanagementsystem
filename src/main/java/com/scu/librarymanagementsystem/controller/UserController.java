@@ -63,4 +63,16 @@ public class UserController {
     public List<User> findUsersByUserNameAndUserType(@RequestParam(required = false) String userName, @RequestParam(required = false) String userType) {
         return userService.findUsersByMultiConditions(userName, userType);
     }
+
+    @GetMapping("/unLogin")
+    @ApiOperation("未登录")
+    public String unLogin() {
+        return "未登录，请登录后再操作！";
+    }
+
+    @GetMapping("/unAuth")
+    @ApiOperation("未授权")
+    public String unAuth() {
+        return "当前用户无操作权限！";
+    }
 }

@@ -30,8 +30,8 @@ public class shiroConfig {
 
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
-        shiroFilterFactoryBean.setLoginUrl("/api/index/unLogin");
-        shiroFilterFactoryBean.setUnauthorizedUrl("/api/index/unAuth");
+        shiroFilterFactoryBean.setLoginUrl("/api/Users/unLogin");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/api/Users/unAuth");
 
         return shiroFilterFactoryBean;
     }
