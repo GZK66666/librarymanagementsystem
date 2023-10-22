@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link rel="stylesheet" href="../static/css/public.css" media="all">
+    <style>
+        body {
+            background-color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-form layuimini-form">
+    <div class="layui-form-item">
+        <label class="layui-form-label required">新用户名</label>
+        <div class="layui-input-block">
+            <input type="text" name="username" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">新密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" lay-verify="required" lay-reqtext="密码不能为空" placeholder="请输入密码" value="" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label required">新用户类型</label>
+        <div class="layui-input-block">
+            <input type="radio" name="userType" value="admin" title="管理员" checked="">
+            <input type="radio" name="userType" value="user" title="普通用户">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认修改</button>
+        </div>
+    </div>
+</div>
+</div>
+<script src="../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
+<script>
+    layui.use(['form'], function () {
+        var form = layui.form,
+            layer = layui.layer,
+            $ = layui.$;
+
+        //监听提交
+        form.on('submit(saveBtn)', function (data) {
+            // 获取 URL 查询字符串
+            var queryString = window.location.search;
+            var params = {};
+
+            if (queryString) {
+                queryString = queryString.substring(1); // 去掉 '?' 字符
+                var paramPairs = queryString.split('&');
+
+                for (var i = 0; i < paramPairs.length; i++) {
+                    var pair = paramPairs[i].split('=');
+                    var paramName = decodeURIComponent(pair[0]);
+                    var paramValue = decodeURIComponent(pair[1]);
+                    params[paramName] = paramValue;
+                }
+            }
+            // 获取输入数据
+            var inputData = JSON.parse(JSON.stringify(data.field));
+
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/Users/updateUser",
+                data: {
+                    id: params.id,
+                    newUsername: inputData["username"],
+                    newPassword: inputData["password"],
+                    newUserType: inputData["userType"]
+                },
+                success: function (result) {
+                    if (result === 1) {
+                        layer.alert("更新成功", { title: '成功' });
+                    } else {
+                        layer.alert("更新失败", { title: '失败' });
+                    }
+                },
+                error: function () {
+                    layer.msg("请求失败");
+                }
+            });
+
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

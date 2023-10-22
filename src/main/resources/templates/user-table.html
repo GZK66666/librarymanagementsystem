@@ -27,7 +27,7 @@
                         <div class="layui-inline">
                             <label class="layui-form-label">用户类型</label>
                             <div class="layui-input-inline">
-                                <select name="quiz1">
+                                <select name="userType">
                                     <option value="">请选择用户类型</option>
                                     <option value="admin">管理员</option>
                                     <option value="user">普通用户</option>
@@ -45,7 +45,6 @@
         <script type="text/html" id="toolbarDemo">
             <div class="layui-btn-container">
                 <button class="layui-btn layui-btn-normal layui-btn-sm data-add-btn" lay-event="add"> 添加 </button>
-                <button class="layui-btn layui-btn-sm layui-btn-danger data-delete-btn" lay-event="delete"> 删除 </button>
             </div>
         </script>
 
@@ -65,45 +64,66 @@
             form = layui.form,
             table = layui.table;
 
-        table.render({
-            elem: '#currentTableId',
-            url: 'http://localhost:8080/api/Users/findUsers',
-            toolbar: '#toolbarDemo',
-            defaultToolbar: ['filter', 'exports', 'print', {
-                title: '提示',
-                layEvent: 'LAYTABLE_TIPS',
-                icon: 'layui-icon-tips'
-            }],
-            cols: [[
-                {type: "checkbox", width: 50},
-                {field: 'id', width: 150, title: 'ID', sort: true},
-                {field: 'username', width: 150, title: '用户名'},
-                {field: 'password', width: 150, title: '密码', sort: true},
-                {field: 'userType', width: 150, title: '用户类型', sort: true},
-                {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
-            ]],
-            limits: [10, 15, 20, 25, 50, 100],
-            limit: 15,
-            page: true,
-            skin: 'line'
-        });
+        // 有数据用数据填充表格，否则走url拿数据
+        function renderTable(data) {
+            var tableData = {
+                elem: '#currentTableId',
+                toolbar: '#toolbarDemo',
+                defaultToolbar: ['filter', 'exports', 'print', {
+                    title: '提示',
+                    layEvent: 'LAYTABLE_TIPS',
+                    icon: 'layui-icon-tips'
+                }],
+                cols: [[
+                    {type: "checkbox", width: 50},
+                    {field: 'id', width: 150, title: 'ID', sort: true},
+                    {field: 'username', width: 150, title: '用户名'},
+                    {field: 'password', width: 150, title: '密码', sort: true},
+                    {field: 'userType', width: 150, title: '用户类型', sort: true},
+                    {title: '操作', minWidth: 150, toolbar: '#currentTableBar', align: "center"}
+                ]],
+                limits: [10, 15, 20, 25, 50, 100],
+                limit: 15,
+                page: true,
+                skin: 'line'
+            };
+
+            if (data) {
+                tableData.data = data.data;
+            } else {
+                tableData.url = 'http://localhost:8080/api/Users/findUsers';
+            }
+
+            table.render(tableData);
+        }
+
+        renderTable(null);
 
         // 监听搜索操作
         form.on('submit(data-search-btn)', function (data) {
-            var result = JSON.stringify(data.field);
-            layer.alert(result, {
-                title: '最终的搜索信息'
-            });
+            var inputData = JSON.parse(JSON.stringify(data.field));
+            var username = inputData['username'];
+            var userType = inputData['userType'];
 
-            //执行搜索重载
-            table.reload('currentTableId', {
-                page: {
-                    curr: 1
+            requestData = {}
+            if (username !== "") {
+                requestData.userName = username;
+            }
+            if (userType !== "") {
+                requestData.userType = userType
+            }
+
+            $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/api/Users/findUsers",
+                data: requestData,
+                success: function (data) {
+                    renderTable(data);
+                },
+                error: function () {
+                    layer.msg("请求失败");
                 }
-                , where: {
-                    searchParams: result
-                }
-            }, 'data');
+            });
 
             return false;
         });
@@ -120,15 +140,14 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '../static/page/table/add.html',
+                    content: 'user-add.html',
+                    end: function () { // 弹出层关闭后重新渲染表格
+                        renderTable(null);
+                    }
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
                 });
-            } else if (obj.event === 'delete') {  // 监听删除操作
-                var checkStatus = table.checkStatus('currentTableId')
-                    , data = checkStatus.data;
-                layer.alert(JSON.stringify(data));
             }
         });
 
@@ -138,9 +157,10 @@
         });
 
         table.on('tool(currentTableFilter)', function (obj) {
-            var data = obj.data;
-            if (obj.event === 'edit') {
+            var data = JSON.parse(JSON.stringify(obj.data));
 
+            if (obj.event === 'edit') {
+                var params = "?id=" + data['id'] + "&username=" + data['username'] + "&password=" + data['password'] + "&userType=" + data['userType']
                 var index = layer.open({
                     title: '编辑用户',
                     type: 2,
@@ -148,7 +168,10 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: '../static/page/table/edit.html',
+                    content: 'user-edit.html' + params,
+                    end: function () { // 弹出层关闭后重新渲染表格
+                        renderTable(null);
+                    }
                 });
                 $(window).on("resize", function () {
                     layer.full(index);
@@ -156,8 +179,27 @@
                 return false;
             } else if (obj.event === 'delete') {
                 layer.confirm('真的删除行么', function (index) {
-                    obj.del();
+                    $.ajax({
+                        type: "GET",
+                        url: "http://localhost:8080/api/Users/delete",
+                        data: {
+                            id: data['id']
+                        },
+                        success: function (data) {
+                            if (data === 1) {
+                                layer.msg("删除成功");
+                            } else {
+                                layer.msg("删除失败");
+                            }
+                        },
+                        error: function () {
+                            layer.msg("请求失败");
+                        }
+                    });
+
                     layer.close(index);
+
+                    renderTable(null);
                 });
             }
         });
