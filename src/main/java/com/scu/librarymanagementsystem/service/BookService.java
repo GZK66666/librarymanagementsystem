@@ -77,6 +77,10 @@ public class BookService {
 
     public List<Book> findBooksByMultiConditions(Long isbn, String bookName, String author) {
         try {
+            if (isbn == null && bookName == null && author == null) { // 均为空直接走数据库返回所有数据
+                return bookRepository.findAll();
+            }
+
             String cacheKey = generateCacheKey(isbn, bookName, author);
             List<Book> cacheResult = (List<Book>) redisUtil.get(cacheKey);
             if (cacheResult != null && !cacheResult.isEmpty()) {

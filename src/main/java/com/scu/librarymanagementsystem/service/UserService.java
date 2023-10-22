@@ -84,6 +84,10 @@ public class UserService {
 
     public List<User> findUsersByMultiConditions(String username, String userType) {
         try {
+            if (username == null && userType == null) { // 均为空的时候直接走数据库返回所有数据
+                return userRepository.findAll();
+            }
+
             String cacheKey = generateCacheKey(username, userType);
             List<User> cacheResult = (List<User>) redisUtil.get(cacheKey);
             if (cacheResult != null && !cacheResult.isEmpty()) {
