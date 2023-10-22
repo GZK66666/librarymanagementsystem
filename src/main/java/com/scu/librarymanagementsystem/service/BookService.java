@@ -38,7 +38,7 @@ public class BookService {
 
             return 1;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("addBook failed, isbn:{}, bookName:{}, author:{}, err msg:{}", isbn, bookName, author, e.getStackTrace());
             return 0;
         }
     }
@@ -54,7 +54,7 @@ public class BookService {
 
             return 1;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("deleteBook failed, isbn:{}, err msg:{}", isbn, e.getStackTrace());
             return 0;
         }
     }
@@ -70,7 +70,7 @@ public class BookService {
 
             return 1;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("updateBook failed, isbn:{}, newBookName:{}, newAuthor:{}, err msg{}", isbn, newBookName, newAuthor, e.getStackTrace());
             return 0;
         }
     }
@@ -88,7 +88,7 @@ public class BookService {
 
             return dbResult;
         } catch (Exception e) {
-            log.error(e.getMessage());
+            log.error("findBook failed, isbn:{}, bookName:{}, author:{}, err msg:{}", isbn, bookName, author, e.getStackTrace());
             return new ArrayList<>();
         }
     }
