@@ -13,7 +13,9 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/Users")
@@ -60,8 +62,16 @@ public class UserController {
     @GetMapping("/findUsers")
     @ApiOperation("搜索用户")
     @CrossOrigin // todo: remove when dev
-    public List<User> findUsersByUserNameAndUserType(@RequestParam(required = false) String userName, @RequestParam(required = false) String userType) {
-        return userService.findUsersByMultiConditions(userName, userType);
+    public Map<String, Object> findUsersByUserNameAndUserType(@RequestParam(required = false) String userName, @RequestParam(required = false) String userType) {
+        List<User> users =  userService.findUsersByMultiConditions(userName, userType);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 0);
+        response.put("msg", "");
+        response.put("count", users.size());
+        response.put("data", users);
+
+        return response;
     }
 
     @GetMapping("/unLogin")
