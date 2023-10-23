@@ -183,7 +183,11 @@
                                 layer.msg("删除成功");
                                 renderTable(null);
                             } else {
-                                layer.msg("删除失败");
+                                if (data === "当前用户无操作权限！") {
+                                    layer.alert("当前用户无操作权限!", { title: '失败' });
+                                } else {
+                                    layer.alert("删除失败，其他原因！", { title: '失败' });
+                                }
                             }
                         },
                         error: function () {
