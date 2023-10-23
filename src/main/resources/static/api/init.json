@@ -1,11 +1,11 @@
 {
   "homeInfo": {
     "title": "用户管理",
-    "href": "user-table.html"
+    "href": "/index/user-table"
   },
   "logoInfo": {
     "title": "图书馆管理系统",
-    "image": "../static/images/logo.png",
+    "image": "/images/logo.png",
     "href": ""
   },
   "menuInfo": [
@@ -17,13 +17,13 @@
       "child": [
         {
           "title": "用户管理",
-          "href": "user-table.html",
+          "href": "/index/user-table",
           "icon": "fa fa-window-maximize",
           "target": "_self"
         },
         {
           "title": "图书管理",
-          "href": "book-table.html",
+          "href": "/index/book-table",
           "icon": "fa fa-file-text",
           "target": "_self"
         }

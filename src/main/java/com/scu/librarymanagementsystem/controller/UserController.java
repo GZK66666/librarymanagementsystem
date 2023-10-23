@@ -20,7 +20,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/Users")
 @Api(tags = "用户管理")
-@CrossOrigin(origins = "http://localhost:63342") // 允许跨域请求
 public class UserController {
     @Autowired
     UserService userService;

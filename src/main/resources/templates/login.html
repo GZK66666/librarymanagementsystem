@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>图书馆管理系统-登陆</title>
@@ -9,7 +9,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" href="../static/lib/layui-v2.6.3/css/layui.css" media="all">
+    <link th:href="@{/lib/layui-v2.6.3/css/layui.css}" rel="stylesheet" media="all">
     <!--[if lt IE 9]>
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
@@ -54,9 +54,9 @@
         </div>
     </div>
 </div>
-<script src="../static/lib/jquery-3.4.1/jquery-3.4.1.min.js" charset="utf-8"></script>
-<script src="../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script src="../static/lib/jq-module/jquery.particleground.min.js" charset="utf-8"></script>
+<script th:src="@{/lib/jquery-3.4.1/jquery-3.4.1.min.js}" charset="utf-8"></script>
+<script th:src="@{/lib/layui-v2.6.3/layui.js}" charset="utf-8"></script>
+<script th:src="@{/lib/jq-module/jquery.particleground.min.js}" charset="utf-8"></script>
 <script>
     layui.use(['form'], function () {
         var form = layui.form,
@@ -78,8 +78,8 @@
             data = data.field;
             // 校验用户名和密码
             $.ajax({
-                url: 'http://localhost:8080/api/Users/login', // todo: replace by relative path
                 method: 'GET',
+                url: '/api/Users/login',
                 data: {
                     userName: data.username,
                     passWord: data.password
@@ -95,7 +95,7 @@
                         return false
                     }
 
-                    window.location = 'main.html';
+                    window.location = '/index/main';
                 }
             });
 

@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>layui</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="../static/lib/layui-v2.6.3/css/layui.css" media="all">
-    <link rel="stylesheet" href="../static/css/public.css" media="all">
+    <link rel="stylesheet" th:href="@{/lib/layui-v2.6.3/css/layui.css}" media="all">
+    <link rel="stylesheet" th:href="@{/css/public.css}" media="all">
 </head>
 <body>
 <div class="layuimini-container">
@@ -53,8 +53,8 @@
 
     </div>
 </div>
-<script src="../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
-<script>
+<script th:src="@{/lib/layui-v2.6.3/layui.js}" charset="utf-8"></script>
+<script th:inline="none">
     layui.use(['form', 'table'], function () {
         var $ = layui.jquery,
             form = layui.form,
@@ -85,7 +85,7 @@
             if (data) {
                 tableData.data = data.data;
             } else {
-                tableData.url = 'http://localhost:8080/api/Books/findBooks';
+                tableData.url = '/api/Books/findBooks';
             }
 
             table.render(tableData);
@@ -109,7 +109,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/api/Books/findBooks",
+                url: "/api/Books/findBooks",
                 data: requestData,
                 success: function (data) {
                     renderTable(data);
@@ -134,7 +134,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: 'book-add.html',
+                    content: '/index/book-add',
                     end: function () { // 弹出层关闭后重新渲染表格
                         renderTable(null);
                     }
@@ -161,7 +161,7 @@
                     maxmin:true,
                     shadeClose: true,
                     area: ['100%', '100%'],
-                    content: 'book-edit.html' + params,
+                    content: '/index/book-edit' + params,
                     end: function () { // 弹出层关闭后重新渲染表格
                         renderTable(null);
                     }
@@ -174,7 +174,7 @@
                 layer.confirm('真的删除行么', function (index) {
                     $.ajax({
                         type: "GET",
-                        url: "http://localhost:8080/api/Books/delete",
+                        url: "/api/Books/delete",
                         data: {
                             isbn: data['isbn']
                         },

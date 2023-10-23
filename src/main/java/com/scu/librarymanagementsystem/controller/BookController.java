@@ -15,7 +15,6 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api/Books")
 @Api(tags = "图书管理")
-@CrossOrigin(origins = "http://localhost:63342") // 允许跨域请求
 public class BookController {
     @Autowired
     private BookService bookService;
