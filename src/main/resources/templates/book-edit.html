@@ -17,31 +17,24 @@
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-form-item">
-        <label class="layui-form-label required">用户名</label>
+        <label class="layui-form-label required">新图书名</label>
         <div class="layui-input-block">
-            <input type="text" name="username" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
-            <tip>用户名不能与已有的重复。</tip>
+            <input type="text" name="bookName" lay-verify="required" lay-reqtext="图书名不能为空" placeholder="请输入图书名" value="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">密码</label>
+        <label class="layui-form-label required">新作者</label>
         <div class="layui-input-block">
-            <input type="password" name="password" lay-verify="required" lay-reqtext="密码不能为空" placeholder="请输入密码" value="" class="layui-input">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label required">用户类型</label>
-        <div class="layui-input-block">
-            <input type="radio" name="userType" value="admin" title="管理员" checked="">
-            <input type="radio" name="userType" value="user" title="普通用户">
+            <input type="text" name="author" lay-verify="required" lay-reqtext="作者不能为空" placeholder="请输入作者" value="" class="layui-input">
         </div>
     </div>
 
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认保存</button>
+            <button class="layui-btn layui-btn-normal" lay-submit lay-filter="saveBtn">确认修改</button>
         </div>
     </div>
+</div>
 </div>
 <script src="../static/lib/layui-v2.6.3/layui.js" charset="utf-8"></script>
 <script>
@@ -52,21 +45,38 @@
 
         //监听提交
         form.on('submit(saveBtn)', function (data) {
+            // 获取 URL 查询字符串
+            var queryString = window.location.search;
+            var params = {};
+
+            if (queryString) {
+                queryString = queryString.substring(1); // 去掉 '?' 字符
+                var paramPairs = queryString.split('&');
+
+                for (var i = 0; i < paramPairs.length; i++) {
+                    var pair = paramPairs[i].split('=');
+                    var paramName = decodeURIComponent(pair[0]);
+                    var paramValue = decodeURIComponent(pair[1]);
+                    params[paramName] = paramValue;
+                }
+            }
+            console.log(params);
+            // 获取输入数据
             var inputData = JSON.parse(JSON.stringify(data.field));
 
             $.ajax({
-                type: "POST",
-                url: "http://localhost:8080/api/Users/add",
+                type: "GET",
+                url: "http://localhost:8080/api/Books/updateBook",
                 data: {
-                    userName: inputData["username"],
-                    passWord: inputData["password"],
-                    userType: inputData["userType"]
+                    isbn: params.isbn,
+                    bookName: inputData["bookName"],
+                    author: inputData["author"]
                 },
                 success: function (result) {
                     if (result === 1) {
-                        layer.alert("添加成功", { title: '成功' });
+                        layer.alert("修改成功", { title: '成功' });
                     } else {
-                        layer.alert("添加失败", { title: '失败' });
+                        layer.alert("修改失败", { title: '失败' });
                     }
                 },
                 error: function () {

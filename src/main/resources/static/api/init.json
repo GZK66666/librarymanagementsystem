@@ -23,7 +23,7 @@
         },
         {
           "title": "图书管理",
-          "href": "../static/page/table.html",
+          "href": "book-table.html",
           "icon": "fa fa-file-text",
           "target": "_self"
         }

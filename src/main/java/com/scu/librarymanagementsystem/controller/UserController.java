@@ -27,7 +27,6 @@ public class UserController {
 
     @GetMapping("/login")
     @ApiOperation("登陆")
-    @CrossOrigin // todo: remove when dev
     public String login(@RequestParam String userName, @RequestParam String passWord) {
         Subject subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(userName, passWord);
@@ -62,7 +61,6 @@ public class UserController {
 
     @GetMapping("/findUsers")
     @ApiOperation("搜索用户")
-    @CrossOrigin // todo: remove when dev
     public Map<String, Object> findUsersByUserNameAndUserType(@RequestParam(required = false) String userName, @RequestParam(required = false) String userType) {
         List<User> users =  userService.findUsersByMultiConditions(userName, userType);
 

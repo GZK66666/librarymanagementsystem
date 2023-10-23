@@ -17,23 +17,22 @@
 <body>
 <div class="layui-form layuimini-form">
     <div class="layui-form-item">
-        <label class="layui-form-label required">用户名</label>
+        <label class="layui-form-label required">ISBN</label>
         <div class="layui-input-block">
-            <input type="text" name="username" lay-verify="required" lay-reqtext="用户名不能为空" placeholder="请输入用户名" value="" class="layui-input">
-            <tip>用户名不能与已有的重复。</tip>
+            <input type="text" name="isbn" lay-verify="required" lay-reqtext="isbn不能为空" placeholder="请输入isbn" value="" class="layui-input">
+            <tip>isbn不能与已有的重复。</tip>
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">密码</label>
+        <label class="layui-form-label required">图书名</label>
         <div class="layui-input-block">
-            <input type="password" name="password" lay-verify="required" lay-reqtext="密码不能为空" placeholder="请输入密码" value="" class="layui-input">
+            <input type="text" name="bookName" lay-verify="required" lay-reqtext="图书名不能为空" placeholder="请输入图书名" value="" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label required">用户类型</label>
+        <label class="layui-form-label required">作者</label>
         <div class="layui-input-block">
-            <input type="radio" name="userType" value="admin" title="管理员" checked="">
-            <input type="radio" name="userType" value="user" title="普通用户">
+            <input type="text" name="author" lay-verify="required" lay-reqtext="作者不能为空" placeholder="请输入作者" value="" class="layui-input">
         </div>
     </div>
 
@@ -56,11 +55,11 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/api/Users/add",
+                url: "http://localhost:8080/api/Books/add",
                 data: {
-                    userName: inputData["username"],
-                    passWord: inputData["password"],
-                    userType: inputData["userType"]
+                    isbn: inputData["isbn"],
+                    bookName: inputData["bookName"],
+                    author: inputData["author"]
                 },
                 success: function (result) {
                     if (result === 1) {

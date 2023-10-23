@@ -7,11 +7,15 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/Books")
 @Api(tags = "图书管理")
+@CrossOrigin(origins = "http://localhost:63342") // 允许跨域请求
 public class BookController {
     @Autowired
     private BookService bookService;
@@ -36,7 +40,15 @@ public class BookController {
 
     @GetMapping("/findBooks")
     @ApiOperation("查询图书")
-    public List<Book> findBooks(@RequestParam(required = false) Long isbn, @RequestParam(required = false) String bookName, @RequestParam(required = false) String author) {
-        return bookService.findBooksByMultiConditions(isbn, bookName, author);
+    public Map<String, Object> findBooks(@RequestParam(required = false) Long isbn, @RequestParam(required = false) String bookName, @RequestParam(required = false) String author) {
+        List<Book> books = bookService.findBooksByMultiConditions(isbn, bookName, author);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("code", 0);
+        response.put("msg", "");
+        response.put("count", books.size());
+        response.put("data", books);
+
+        return response;
     }
 }
