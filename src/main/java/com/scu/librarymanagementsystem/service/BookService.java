@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class BookService {
             return 1;
         } catch (Exception e) {
             log.error("deleteBook failed, isbn:{}, err msg:{}", isbn, e.getStackTrace());
+            // 手动标记事务为回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return 0;
         }
     }
@@ -71,6 +74,8 @@ public class BookService {
             return 1;
         } catch (Exception e) {
             log.error("updateBook failed, isbn:{}, newBookName:{}, newAuthor:{}, err msg{}", isbn, newBookName, newAuthor, e.getStackTrace());
+            // 手动标记事务为回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return 0;
         }
     }

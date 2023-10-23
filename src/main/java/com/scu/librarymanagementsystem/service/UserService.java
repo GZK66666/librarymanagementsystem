@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -55,6 +56,8 @@ public class UserService {
             return 1;
         } catch (Exception e) {
             log.error("deleteUserById failed, id:{}, err msg:{}", id, e.getStackTrace());
+            // 手动标记事务为回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return 0;
         }
     }
@@ -78,6 +81,8 @@ public class UserService {
         } catch (Exception e) {
             log.error("updateUser failed, id:{}, newUsername:{}, newPassword:{}, newUserType:{}, err msg:{}",
                     id, newUsername, newPassword, newUserType, e.getStackTrace());
+            // 手动标记事务为回滚
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return 0;
         }
     }
