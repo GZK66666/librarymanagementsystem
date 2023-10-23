@@ -188,6 +188,7 @@
                         success: function (data) {
                             if (data === 1) {
                                 layer.msg("删除成功");
+                                renderTable(null);
                             } else {
                                 layer.msg("删除失败");
                             }
@@ -198,8 +199,6 @@
                     });
 
                     layer.close(index);
-
-                    renderTable(null);
                 });
             }
         });
