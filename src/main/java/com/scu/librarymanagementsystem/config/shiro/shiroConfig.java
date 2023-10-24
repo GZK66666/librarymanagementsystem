@@ -19,7 +19,7 @@ public class shiroConfig {
 
         // 配置URL拦截规则
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-//        filterChainDefinitionMap.put("/api/Users/add", "authc");
+        filterChainDefinitionMap.put("/api/Users/add", "roles[admin]");
         filterChainDefinitionMap.put("/api/Users/delete", "roles[admin]");
         filterChainDefinitionMap.put("/api/Users/updateUser", "roles[admin]");
         filterChainDefinitionMap.put("/api/Users/findUsers", "authc");
